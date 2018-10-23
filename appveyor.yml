@@ -1,4 +1,17 @@
 
+#
+# Current setup:
+# - All development is done in a fork.
+# - Pull requests are merged into master and it auto publishes to the myget pre-release 'homely-oss' feed.
+# - Tag 'master' to auto publishes to the nuget feed.
+#
+
+
+### ***********************************************************************************************************
+### REQUIRED: AV UI => Project Settings -> General -> "Enable secure variables in all Pull Requests" TICKED ON.
+### ***********************************************************************************************************
+
+
 version: '{build}.0.0-dev'
 configuration: Release
 os: Visual Studio 2017
@@ -15,7 +28,9 @@ init:
       }
       iex ((new-object net.webclient).DownloadString('https://gist.githubusercontent.com/PureKrome/0f79e25693d574807939/raw/f5b40256fc2ca77d49f1c7773d28406152544c1e/appveyor-build-info.ps'))
 
-
+# The private nuget feeds don't include the authentication apikey. As such, we need to set those values, here.
+# PR's don't reference secure-variables (AppVeyor default, UI setting only.) As such, I've had to tick this setting, in the AV UI.
+  
 before_build:
   # Display .NET Core version
   - cmd: dotnet --info
@@ -24,8 +39,9 @@ before_build:
 
 build_script:
   - dotnet build -c %CONFIGURATION% -v minimal /p:Version=%APPVEYOR_BUILD_VERSION% /p:DebugType=full --no-restore
+  - dotnet pack src\Homely.AspNetCore.WebApi.CoreApp\Homely.AspNetCore.WebApi.CoreApp.csproj -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-build
 
-test: off
+test: no
 
 artifacts:
   - path: '**\*.nupkg'
