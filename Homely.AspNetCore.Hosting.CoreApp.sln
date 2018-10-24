@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homely.AspNetCore.WebApi.CoreApp", "src\Homely.AspNetCore.WebApi.CoreApp\Homely.AspNetCore.WebApi.CoreApp.csproj", "{CF46F002-F76B-495C-A875-92CC5A72AEE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homely.AspNetCore.WebApi.CoreApp", "src\Homely.AspNetCore.Hosting.CoreApp\Homely.AspNetCore.Hosting.CoreApp.csproj", "{CF46F002-F76B-495C-A875-92CC5A72AEE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

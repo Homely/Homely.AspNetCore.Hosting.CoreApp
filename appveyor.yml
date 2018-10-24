@@ -39,7 +39,7 @@ before_build:
 
 build_script:
   - dotnet build -c %CONFIGURATION% -v minimal /p:Version=%APPVEYOR_BUILD_VERSION% /p:DebugType=full --no-restore
-  - dotnet pack src\Homely.AspNetCore.WebApi.CoreApp\Homely.AspNetCore.WebApi.CoreApp.csproj -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-build
+  - dotnet pack src\Homely.AspNetCore.Hosting.CoreApp\Homely.AspNetCore.Hosting.CoreApp.csproj -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-build
 
 test: no
 
