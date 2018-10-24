@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Homely.AspNetCore.WebApi.CoreApp
+namespace Homely.AspNetCore.Hosting.CoreApp
 {
     public static class Program
     {
