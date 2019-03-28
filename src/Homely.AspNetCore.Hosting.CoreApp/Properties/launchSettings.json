@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:49941/",
+      "applicationUrl": "http://localhost:55977/",
       "sslPort": 0
     }
   },
@@ -15,13 +15,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Homely.AspNetCore.WebApi.CoreApp": {
+    "Homely.AspNetCore.Hosting.CoreApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:49942/"
+      "applicationUrl": "http://localhost:55978/"
     }
   }
 }
