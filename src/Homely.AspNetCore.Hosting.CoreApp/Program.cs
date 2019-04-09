@@ -41,7 +41,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
             .AddEnvironmentVariables()
             .Build();
 
-        private static IWebHostBuilder CreateWebHostBuilder<T>(string[] args) where T : class =>
+        public static IWebHostBuilder CreateWebHostBuilder<T>(string[] args) where T : class =>
             WebHost.CreateDefaultBuilder(args)
                    .UseStartup<T>()
                    .UseConfiguration(Configuration)
