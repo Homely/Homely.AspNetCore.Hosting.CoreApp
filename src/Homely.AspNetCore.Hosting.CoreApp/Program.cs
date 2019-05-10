@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Serilog;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace Homely.AspNetCore.Hosting.CoreApp
 {
@@ -15,7 +15,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         /// </summary>
         /// <typeparam name="T">Startup class type.</typeparam>
         /// <param name="args">Optional command line arguments.</param>
-        /// <returns></returns>
+        /// <returns>Task of this Main application run.</returns>
         public static async Task Main<T>(string[] args) where T : class
         {
             var options = new MainOptions
@@ -23,7 +23,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 CommandLineArguments = args
             };
 
-            await Program.Main<T>(options);
+            await Main<T>(options);
         }
 
         /// <summary>
@@ -70,14 +70,16 @@ namespace Homely.AspNetCore.Hosting.CoreApp
             }
             finally
             {
-                const string shutdownMessage = "Application has now shutdown.";
+                var shutdownMessage = string.IsNullOrWhiteSpace(options.LastLoggingInformationMessage)
+                    ? "Application has now shutdown."
+                    : options.LastLoggingInformationMessage;
 
                 if (Log.Logger != null)
                 {
+                    Log.Information(shutdownMessage);
+
                     // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
                     Log.CloseAndFlush();
-
-                    Log.Information(shutdownMessage);
                 }
                 else
                 {
@@ -95,7 +97,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
 
             return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable(environmentVariableKey) ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables()
                 .Build();
