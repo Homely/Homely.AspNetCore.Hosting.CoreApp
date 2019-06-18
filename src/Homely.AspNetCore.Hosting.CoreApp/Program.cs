@@ -51,6 +51,18 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     Log.Information(options.FirstLoggingInformationMessage);
                 }
 
+                if (options.LogAssemblyInformation)
+                {
+                    var assembly = typeof(T).Assembly;
+                    var assemblyDate = string.IsNullOrWhiteSpace(assembly.Location)
+                                           ? "-- unknown --"
+                                           : File.GetLastWriteTime(assembly.Location).ToString("u");
+                    
+                    var assemblyInfo = $"Name: {assembly.GetName().Name} | Version: {assembly.GetName().Version} | Date: {assemblyDate}";
+
+                    Log.Information(assemblyInfo);
+                }
+
                 await CreateWebHostBuilder<T>(options.CommandLineArguments).Build()
                                                            .RunAsync();
             }
