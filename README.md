@@ -16,18 +16,24 @@ NOTE: This is a `netcoreapp` application and not a `netstandard` library. So it 
 ---
 ## Why use this? What's wrong with the default standard program.cs?
 
-We're just _extending_ the default `program.cs` content that comes out of the box by wrapping the default code inside `Serilog` error handling. So if _any_ error occurs at any stage of the program (most importantly, at the EARLY starting/initialization stages, `Serilog` will nicely handle this.
+We're just _extending_ the default `program.cs` content that comes out of the box by:
+
+- Wrapping the default code inside `Serilog` error handling. So if _any_ error occurs at any stage of the program (most importantly, at the EARLY starting/initialization stages, `Serilog` will nicely handle this.
+- Logging some important*** information about the web api: assembly date, version and when this program first started.
 
 That's it :) 
 
 Reducing boilerplate code.
 
+*** We (at Homely) thinks this is importnat!
+
 ---
-## How to use
 
-1. `install-package Homely.AspNetCore.Hosting.CoreApp.Program.Main` into your ASP.NET Core application.
+## How to use this library
+1. install-package Homely.AspNetCore.Hosting.CoreApp.Program.Main into your ASP.NET Core application.
+2. Reference the `Main<T>` method. You can optionally provide some customization ... if you feel like it.
 
-2. In your own `program.cs` file:
+## Simple quickstart
 
 ```
 public static Task Main(string[] args)
@@ -37,6 +43,24 @@ public static Task Main(string[] args)
 ```
 
 NOTE: the `Startup` class should be _your_ `Startup.cs` class.
+
+## More customized startup
+
+```
+public static Task Main(string[] args)
+{
+    var options = new MainOptions
+    {
+        CommandLineArguments = args,
+        FirstLoggingInformationMessage = "~~ Accounts Web Api ~~",
+        LogAssemblyInformation = true,
+        LastLoggingInformationMessage = "-- Accounts Web Api has ended/terminated --",
+        EnvironmentVariableKey = "ASPNETCORE_ENVIRONMENT"
+    };
+
+    return Homely.AspNetCore.Hosting.CoreApp.Main<Startup>(options);
+}
+```
 
 ---
 
