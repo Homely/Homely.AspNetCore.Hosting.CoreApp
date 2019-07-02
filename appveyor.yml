@@ -45,26 +45,23 @@ test: no
 
 artifacts:
   - path: '**\*.nupkg'
-    name: homely-nugets
+    name: homely-nuget-packages
     type: NuGetPackage
-
+  - path: '**\*.snupkg'
+    name: homely-nuget-symbols
+    type: NuGetPackage
 deploy:
   - provider: NuGet
     server: https://www.myget.org/F/homely-oss/api/v2/package
     api_key:
       secure: Hjh+3kM8vuQOP1NCxEMJA85F4ieaRNNWxGo+I4dxxYAZdjaHLy7tVmxw7lLmqDke
     skip_symbols: true
-    artifact: homely-nugets
     on:
       appveyor_repo_tag: false
   - provider: NuGet
     api_key:
       secure: 36NxHYhJErlI2N+nlVlzxRPeNoujnX2l8JyCLgn48v+S3sEZfEesZSzB9W3QW3ZY
     skip_symbols: true
-    artifact: homely-nugets
     on:
       branch: master
       appveyor_repo_tag: true
-
-cache:
-  - packages -> **\packages.config
