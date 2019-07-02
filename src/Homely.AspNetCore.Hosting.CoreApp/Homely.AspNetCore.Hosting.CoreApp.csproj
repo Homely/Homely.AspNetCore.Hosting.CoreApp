@@ -18,11 +18,16 @@
     <PackageTags>homely aspnetcore aspnet-core aspnet-core-2 c# hosting</PackageTags>
     <PackageIconUrl>https://i.imgur.com/PnxWhuz.jpg</PackageIconUrl>
 
+    <!-- Microsoft.NET.Sdk.Web aren't ment for packaging into dll's. You usually publish a website.
+         As such, we need to specify that this is ok to do -->
+    <IsPackable>true</IsPackable>
+    
     <!-- Source Link. REF: https://github.com/dotnet/sourcelink -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
     
   </PropertyGroup>
 
@@ -32,10 +37,6 @@
         <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
     </ItemGroup>
-
-    <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 
     <ItemGroup>
       <None Include="..\..\LICENSE.txt">
