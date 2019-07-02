@@ -5,11 +5,33 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Core;
 
 namespace Homely.AspNetCore.Hosting.CoreApp
 {
     public static class Program
     {
+        private static string Explosion = @"" + Environment.NewLine +
+"" + Environment.NewLine +
+"" + Environment.NewLine +
+"                             ____" + Environment.NewLine +
+"                     __,-~~/~    `---." + Environment.NewLine +
+"                   _/_,---(      ,    )" + Environment.NewLine +
+"               __ /        <    /   )  \\___" + Environment.NewLine +
+"- ------===;;;'====------------------===;;;===----- -  -" + Environment.NewLine +
+"                  \\/  ~\"~\"~\"~\"~\"~\\~\"~)~\"/" + Environment.NewLine +
+"                  (_ (   \\  (     >    \\)" + Environment.NewLine +
+"                   \\_(_<> _>'" + Environment.NewLine +
+"                      ~ `-i' ::>|--\"" + Environment.NewLine +
+"                          I;|.|.|" + Environment.NewLine +
+"                         <|i::|i|`." + Environment.NewLine +
+"                        (` ^'\"`-' \")" + Environment.NewLine +
+"------------------------------------------------------------------" + Environment.NewLine +
+"Nuclear Explosion Mushroom.by Bill March" + Environment.NewLine +
+"" + Environment.NewLine +
+"------------------------------------------------" + Environment.NewLine +
+"";
+
         /// <summary>
         /// The program's main start/entry point. Hold on to your butts .... here we go!
         /// </summary>
@@ -42,9 +64,9 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 }
 
                 Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(GetConfigurationBuilder(options.EnvironmentVariableKey))
-                .Enrich.FromLogContext()
-                .CreateLogger();
+                    .ReadFrom.Configuration(GetConfigurationBuilder(options.EnvironmentVariableKey))
+                    .Enrich.FromLogContext()
+                    .CreateLogger();
 
                 if (!string.IsNullOrWhiteSpace(options.FirstLoggingInformationMessage))
                 {
@@ -64,21 +86,24 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 }
 
                 await CreateWebHostBuilder<T>(options.CommandLineArguments).Build()
-                                                           .RunAsync();
+                                                                           .RunAsync();
             }
             catch (Exception exception)
             {
-                const string errorMessage = "Host terminated unexpectantly. Sadness :~(";
-                if (Log.Logger == null ||
-                    Log.Logger.GetType().Name == "SilentLogger")
-                {
-                    Console.WriteLine(errorMessage);
-                    Console.WriteLine(exception.Message);
-                }
-                else
+                const string errorMessage = "Something seriously unexpected has occurred while preparing the Host. Sadness :~(";
+                if (Log.Logger is Logger)
                 {
                     // TODO: Add metrics (like Application Insights?) to log telemetry failures.
                     Log.Logger.Fatal(exception, errorMessage);
+                }
+                else
+                {
+                    Console.WriteLine(Explosion);
+                    Console.WriteLine(errorMessage);
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine($"Error: {exception.Message}");
+                    Console.WriteLine();
                 }
             }
             finally
@@ -87,7 +112,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     ? "Application has now shutdown."
                     : options.LastLoggingInformationMessage;
 
-                if (Log.Logger != null)
+                if (Log.Logger is Logger)
                 {
                     Log.Information(shutdownMessage);
 
