@@ -69,7 +69,8 @@ namespace Homely.AspNetCore.Hosting.CoreApp
             catch (Exception exception)
             {
                 const string errorMessage = "Host terminated unexpectantly. Sadness :~(";
-                if (Log.Logger == null)
+                if (Log.Logger == null ||
+                    Log.Logger.GetType().Name == "SilentLogger")
                 {
                     Console.WriteLine(errorMessage);
                     Console.WriteLine(exception.Message);
