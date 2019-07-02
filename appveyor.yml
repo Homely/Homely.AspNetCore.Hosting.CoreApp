@@ -50,6 +50,7 @@ artifacts:
   - path: '**\*.snupkg'
     name: homely-nuget-symbols
     type: NuGetPackage
+
 deploy:
 
   # NOTE: MyGet doesn't support snupkg's so we have to manually specify the nuget to send
@@ -70,4 +71,3 @@ deploy:
     on:
       branch: master
       appveyor_repo_tag: true
-    
