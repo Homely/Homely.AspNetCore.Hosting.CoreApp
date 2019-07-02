@@ -51,6 +51,8 @@ artifacts:
     name: homely-nuget-symbols
     type: NuGetPackage
 deploy:
+
+  # NOTE: MyGet doesn't support snupkg's so we have to manually specify the nuget to send
   - provider: NuGet
     server: https://www.myget.org/F/homely-oss/api/v2/package
     api_key:
@@ -58,6 +60,9 @@ deploy:
     skip_symbols: true
     on:
       appveyor_repo_tag: false
+    artifact: homely-nuget-packages
+  
+  # Note: No artifact was specified, so it will default to sending all NuGetPackage artifacts.
   - provider: NuGet
     api_key:
       secure: 36NxHYhJErlI2N+nlVlzxRPeNoujnX2l8JyCLgn48v+S3sEZfEesZSzB9W3QW3ZY
@@ -65,3 +70,4 @@ deploy:
     on:
       branch: master
       appveyor_repo_tag: true
+    
