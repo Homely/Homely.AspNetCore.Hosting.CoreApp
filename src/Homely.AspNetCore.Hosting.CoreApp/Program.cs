@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Core;
 
@@ -11,7 +11,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
 {
     public static class Program
     {
-        private static string Explosion = @"" + Environment.NewLine +
+        private static readonly string Explosion = @"" + Environment.NewLine +
 "" + Environment.NewLine +
 "" + Environment.NewLine +
 "                             ____" + Environment.NewLine +
@@ -27,7 +27,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
 "                         <|i::|i|`." + Environment.NewLine +
 "                        (` ^'\"`-' \")" + Environment.NewLine +
 "------------------------------------------------------------------" + Environment.NewLine +
-"Nuclear Explosion Mushroom.by Bill March" + Environment.NewLine +
+"[Nuclear Explosion Mushroom by Bill March]" + Environment.NewLine +
 "" + Environment.NewLine +
 "------------------------------------------------" + Environment.NewLine +
 "";
@@ -58,16 +58,19 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         {
             try
             {
-                if (options == null)
+                if (options is null)
                 {
                     throw new ArgumentNullException(nameof(options));
                 }
 
+                // Before we do _ANYTHING_ we need to have a logger so we can start
+                // seeing what is going on ... good or bad.
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(GetConfigurationBuilder(options.EnvironmentVariableKey))
                     .Enrich.FromLogContext()
                     .CreateLogger();
 
+                // Display any (optional) initial banner / opening text to define the start of this application now starting.
                 if (!string.IsNullOrWhiteSpace(options.FirstLoggingInformationMessage))
                 {
                     Log.Information(options.FirstLoggingInformationMessage);
@@ -85,12 +88,16 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     Log.Information(assemblyInfo);
                 }
 
-                await CreateWebHostBuilder<T>(options.CommandLineArguments).Build()
-                                                                           .RunAsync();
+                await CreateHostBuilder<T>(options.CommandLineArguments).Build()
+                                                                        .RunAsync();
             }
             catch (Exception exception)
             {
                 const string errorMessage = "Something seriously unexpected has occurred while preparing the Host. Sadness :~(";
+                
+                // We might NOT have created a logger ... because we might be _trying_ to create the logger but
+                // we have some bad setup-configuration-data and boom!!! No logger successfully setup/created.
+                // So, if we do have a logger created, then use it.
                 if (Log.Logger is Logger)
                 {
                     // TODO: Add metrics (like Application Insights?) to log telemetry failures.
@@ -98,6 +105,8 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 }
                 else
                 {
+                    // Nope - failed to create a logger and we have a serious error. So lets
+                    // just fall back to the Console and _hope_ someone can read/access that.
                     Console.WriteLine(Explosion);
                     Console.WriteLine(errorMessage);
                     Console.WriteLine();
@@ -112,6 +121,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     ? "Application has now shutdown."
                     : options.LastLoggingInformationMessage;
 
+                // Again: did we successfully create a logger?
                 if (Log.Logger is Logger)
                 {
                     Log.Information(shutdownMessage);
@@ -128,26 +138,24 @@ namespace Homely.AspNetCore.Hosting.CoreApp
 
         private static IConfiguration GetConfigurationBuilder(string environmentVariableKey)
         {
-            if (string.IsNullOrWhiteSpace(environmentVariableKey))
-            {
-                throw new ArgumentException(nameof(environmentVariableKey));
-            }
-
             return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonFile("appsettings.json", optional: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable(environmentVariableKey) ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables()
                 .Build();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder<T>(string[] args) where T : class =>
-            CreateWebHostBuilder<T>(new MainOptions { CommandLineArguments = args });
+        public static IHostBuilder CreateHostBuilder<T>(string[] args) where T : class =>
+            CreateHostBuilder<T>(new MainOptions { CommandLineArguments = args });
 
-        public static IWebHostBuilder CreateWebHostBuilder<T>(MainOptions options) where T : class =>
-            WebHost.CreateDefaultBuilder(options.CommandLineArguments)
-                   .UseStartup<T>()
-                   .UseConfiguration(GetConfigurationBuilder(options.EnvironmentVariableKey))
-                   .UseSerilog();
+        public static IHostBuilder CreateHostBuilder<T>(MainOptions options) where T : class =>
+            Host.CreateDefaultBuilder(options.CommandLineArguments)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<T>()
+                              .UseConfiguration(GetConfigurationBuilder(options.EnvironmentVariableKey))
+                              .UseSerilog();
+                });
     }
 }
