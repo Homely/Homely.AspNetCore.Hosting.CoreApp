@@ -25,7 +25,7 @@ That's it :)
 
 Reducing boilerplate code.
 
-*** We (at Homely) thinks this is importnat!
+*** We (at Homely) thinks this is important!
 
 ---
 
