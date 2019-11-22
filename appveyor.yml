@@ -48,6 +48,7 @@ artifacts:
     name: homely-nuget-symbols
     type: NuGetPackage
 
+deploy:
   # NOTE: MyGet doesn't support snupkg's so we have to manually specify the nuget to send
   - provider: NuGet
     server: https://www.myget.org/F/homely-oss/api/v2/package
