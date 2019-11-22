@@ -12,7 +12,7 @@
     <Copyright>2018</Copyright>
     <OutputType>Library</OutputType>
     <PackageProjectUrl>https://github.com/Homely/Homely.AspNetCore.Hosting.CoreApp</PackageProjectUrl>
-    <PackageLicenseFile>../../LICENSE.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/Homely/Homely.AspNetCore.Hosting.CoreApp</RepositoryUrl>
     <RepositoryType>.net c# .net-core</RepositoryType>
     <PackageTags>homely aspnetcore aspnet-core aspnet-core-2 c# hosting</PackageTags>
@@ -36,5 +36,6 @@
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
     </ItemGroup>
+
 
 </Project>
