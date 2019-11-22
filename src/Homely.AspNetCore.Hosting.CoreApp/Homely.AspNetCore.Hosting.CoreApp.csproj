@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/Homely/Homely.AspNetCore.Hosting.CoreApp</RepositoryUrl>
     <RepositoryType>.net c# .net-core</RepositoryType>
     <PackageTags>homely aspnetcore aspnet-core aspnet-core-2 c# hosting</PackageTags>
-    <PackageIconUrl>icon.png</PackageIconUrl>
-    <PackageIcon></PackageIcon>
+    <PackageIconUrl>https://i.imgur.com/PnxWhuz.jpg</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
 
     <!-- Microsoft.NET.Sdk.Web aren't ment for packaging into dll's. You usually publish a website.
          As such, we need to specify that this is ok to do -->
