@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -12,7 +12,7 @@
     <Copyright>2018</Copyright>
     <OutputType>Library</OutputType>
     <PackageProjectUrl>https://github.com/Homely/Homely.AspNetCore.Hosting.CoreApp</PackageProjectUrl>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageLicenseFile>../../LICENSE.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/Homely/Homely.AspNetCore.Hosting.CoreApp</RepositoryUrl>
     <RepositoryType>.net c# .net-core</RepositoryType>
     <PackageTags>homely aspnetcore aspnet-core aspnet-core-2 c# hosting</PackageTags>
