@@ -25,7 +25,7 @@ That's it :)
 
 Reducing boilerplate code.
 
-*** We (at Homely) thinks this is importnat!
+*** We (at Homely) thinks this is important!
 
 ---
 
@@ -38,7 +38,7 @@ Reducing boilerplate code.
 ```
 public static Task Main(string[] args)
 {
-    return Homely.AspNetCore.Hosting.CoreApp.Main<Startup>(args);
+    return Homely.AspNetCore.Hosting.CoreApp.Program.Main<Startup>(args);
 }
 ```
 
@@ -58,7 +58,7 @@ public static Task Main(string[] args)
         EnvironmentVariableKey = "ASPNETCORE_ENVIRONMENT"
     };
 
-    return Homely.AspNetCore.Hosting.CoreApp.Main<Startup>(options);
+    return Homely.AspNetCore.Hosting.CoreApp.Program.Main<Startup>(options);
 }
 ```
 
