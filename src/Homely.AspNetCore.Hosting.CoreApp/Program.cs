@@ -9,7 +9,7 @@ using Serilog.Core;
 
 namespace Homely.AspNetCore.Hosting.CoreApp
 {
-    public static class Program
+    public class Program
     {
         private static readonly string Explosion = @"" + Environment.NewLine +
 "" + Environment.NewLine +
@@ -38,7 +38,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         /// <typeparam name="T">Startup class type.</typeparam>
         /// <param name="args">Optional command line arguments.</param>
         /// <returns>Task of this Main application run.</returns>
-        public static async Task Main<T>(string[] args) where T : class
+        public async Task Main<T>(string[] args) where T : class
         {
             var options = new MainOptions
             {
@@ -54,7 +54,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         /// <typeparam name="T">Startup class type.</typeparam>
         /// <param name="options">Options to help setup/configure your program.</param>
         /// <returns>Task of this Main application run.</returns>
-        public static async Task Main<T>(MainOptions options) where T : class
+        public async Task Main<T>(MainOptions options) where T : class
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     var assemblyDate = string.IsNullOrWhiteSpace(assembly.Location)
                                            ? "-- unknown --"
                                            : File.GetLastWriteTime(assembly.Location).ToString("u");
-                    
+
                     var assemblyInfo = $"Name: {assembly.GetName().Name} | Version: {assembly.GetName().Version} | Date: {assemblyDate}";
 
                     Log.Information(assemblyInfo);
@@ -94,7 +94,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
             catch (Exception exception)
             {
                 const string errorMessage = "Something seriously unexpected has occurred while preparing the Host. Sadness :~(";
-                
+
                 // We might NOT have created a logger ... because we might be _trying_ to create the logger but
                 // we have some bad setup-configuration-data and boom!!! No logger successfully setup/created.
                 // So, if we do have a logger created, then use it.
