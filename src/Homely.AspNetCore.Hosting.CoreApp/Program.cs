@@ -38,7 +38,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         /// <typeparam name="T">Startup class type.</typeparam>
         /// <param name="args">Optional command line arguments.</param>
         /// <returns>Task of this Main application run.</returns>
-        public async Task Main<T>(string[] args) where T : class
+        public static async Task Main<T>(string[] args) where T : class
         {
             var options = new MainOptions
             {
@@ -54,7 +54,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         /// <typeparam name="T">Startup class type.</typeparam>
         /// <param name="options">Options to help setup/configure your program.</param>
         /// <returns>Task of this Main application run.</returns>
-        public async Task Main<T>(MainOptions options) where T : class
+        public static async Task Main<T>(MainOptions options) where T : class
         {
             try
             {
@@ -88,8 +88,8 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     Log.Information(assemblyInfo);
                 }
 
-                await CreateHostBuilder<T>(options.CommandLineArguments).Build()
-                                                                        .RunAsync();
+                await CreateHostBuilder<T>(options).Build()
+                                                   .RunAsync();
             }
             catch (Exception exception)
             {
@@ -145,9 +145,6 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 .AddEnvironmentVariables()
                 .Build();
         }
-
-        public static IHostBuilder CreateHostBuilder<T>(string[] args) where T : class =>
-            CreateHostBuilder<T>(new MainOptions { CommandLineArguments = args });
 
         public static IHostBuilder CreateHostBuilder<T>(MainOptions options) where T : class =>
             Host.CreateDefaultBuilder(options.CommandLineArguments)

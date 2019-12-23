@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Homely.AspNetCore.Hosting.CoreApp;
 
-namespace WebApplication1
+namespace SampleWebApplication
 {
     public class Program
     {
