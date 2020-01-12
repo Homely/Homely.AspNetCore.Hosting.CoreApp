@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homely.AspNetCore.Hosting.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleWebApplication", "src\SampleWebApplication\SampleWebApplication.csproj", "{235DBCC8-0AF2-4796-B621-D4D87493650A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homely.AspNetCore.Hosting.CoreApp.Tests", "tests\Homely.AspNetCore.Hosting.CoreApp.Tests\Homely.AspNetCore.Hosting.CoreApp.Tests.csproj", "{D6B81EF9-0602-4891-A822-1DCFFC0B07F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleWebApplication.Tests", "tests\SampleWebApplication.Tests\SampleWebApplication.Tests.csproj", "{C53D66D6-8CB1-402B-8BD2-A21C6BD951F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{235DBCC8-0AF2-4796-B621-D4D87493650A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{235DBCC8-0AF2-4796-B621-D4D87493650A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{235DBCC8-0AF2-4796-B621-D4D87493650A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6B81EF9-0602-4891-A822-1DCFFC0B07F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6B81EF9-0602-4891-A822-1DCFFC0B07F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6B81EF9-0602-4891-A822-1DCFFC0B07F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6B81EF9-0602-4891-A822-1DCFFC0B07F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C53D66D6-8CB1-402B-8BD2-A21C6BD951F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C53D66D6-8CB1-402B-8BD2-A21C6BD951F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C53D66D6-8CB1-402B-8BD2-A21C6BD951F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C53D66D6-8CB1-402B-8BD2-A21C6BD951F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
