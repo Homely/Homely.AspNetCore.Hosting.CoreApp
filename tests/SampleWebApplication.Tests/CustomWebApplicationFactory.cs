@@ -28,7 +28,7 @@ namespace Homely.AspNetCore.Hosting.CoreApp.Tests
                     services.Remove(descriptor);
                 }
 
-                // Use a moq'd IWeatherService.
+                // Use a mocked IWeatherService.
                 var weatherForcasts = Builder<WeatherForecast>.CreateListOfSize(5).Build();
                 var weatherService = new Mock<IWeatherService>();
                 weatherService.Setup(x => x.GetWeatherAsync()).ReturnsAsync(weatherForcasts);
