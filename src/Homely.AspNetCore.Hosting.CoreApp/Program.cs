@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
 
@@ -88,8 +89,13 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     Log.Information(assemblyInfo);
                 }
 
-                await CreateHostBuilder<T>(options).Build()
-                                                   .RunAsync();
+                var host = CreateHostBuilder<T>(options).Build();
+
+                // Execute any pre-run action.
+                options.CustomPreRunAction?.Invoke(host);
+
+                // Ok, now lets go and start!
+                await host.RunAsync();
             }
             catch (Exception exception)
             {
@@ -146,13 +152,35 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 .Build();
         }
 
-        public static IHostBuilder CreateHostBuilder<T>(MainOptions options) where T : class =>
-            Host.CreateDefaultBuilder(options.CommandLineArguments)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<T>()
-                              .UseConfiguration(GetConfigurationBuilder(options.EnvironmentVariableKey))
-                              .UseSerilog();
-                });
+        public static IHostBuilder CreateHostBuilder<T>(MainOptions options) where T : class
+        {
+            var hostBuilder = Host
+                .CreateDefaultBuilder(options.CommandLineArguments)
+                .UseSerilog();
+
+            if (options.CustomConfigureServices is null)
+            {
+                hostBuilder
+                    .ConfigureWebHostDefaults(webBuilder =>
+                     {
+                         webBuilder
+                            .UseStartup<T>()
+                            .UseConfiguration(GetConfigurationBuilder(options.EnvironmentVariableKey));
+                     });
+            }
+            else
+            {
+                hostBuilder.ConfigureHostConfiguration(builder =>
+                                 {
+                                     var configuration = GetConfigurationBuilder(options.EnvironmentVariableKey);
+                                     builder.AddConfiguration(configuration);
+                                 });
+
+                hostBuilder.ConfigureServices(options.CustomConfigureServices);
+            }
+
+            return hostBuilder;
+        }
+            
     }
 }

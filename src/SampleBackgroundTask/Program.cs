@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Homely.AspNetCore.Hosting.CoreApp;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SampleWebApplication
+namespace SampleBackgroundTask
 {
     public class Program
     {
@@ -15,9 +14,13 @@ namespace SampleWebApplication
             var options = new MainOptions
             {
                 CommandLineArguments = args,
-                FirstLoggingInformationMessage = "~~ Sample Web Application ~~",
+                FirstLoggingInformationMessage = "~~ Sample Background Task ~~",
                 LogAssemblyInformation = true,
-                LastLoggingInformationMessage = "-- Sample Web Application has ended/terminated --",
+                LastLoggingInformationMessage = "-- Sample Background Task has ended/terminated --",
+                CustomConfigureServices = new Action<HostBuilderContext, IServiceCollection>((hostContext, services) =>
+                {
+                    services.AddHostedService<Worker>();
+                }),
                 CustomPreRunAction = new Action<IHost>(host =>
                 {
                     using (var scope = host.Services.CreateScope())
@@ -29,7 +32,8 @@ namespace SampleWebApplication
                 })
             };
 
-            return Homely.AspNetCore.Hosting.CoreApp.Program.Main<Startup>(options);
+
+            return Homely.AspNetCore.Hosting.CoreApp.Program.Main<Program>(options);
         }
     }
 }
