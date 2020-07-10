@@ -14,7 +14,9 @@
 
 version: '{build}.0.0-dev'
 configuration: Release
-os: Visual Studio 2019
+os: 
+  - Visual Studio 2019
+#  - Ubuntu
 pull_requests:
   do_not_increment_build_number: true
 
@@ -30,15 +32,18 @@ init:
   
 before_build:
   # Display .NET Core version
-  - cmd: dotnet --info
+  - dotnet --info
   # Display minimal restore text
-  - cmd: dotnet restore --verbosity quiet
+  - dotnet restore --verbosity quiet
 
 build_script:
   - dotnet build -c %CONFIGURATION% -v minimal /p:Version=%APPVEYOR_BUILD_VERSION% --no-restore
-  - dotnet pack src\Homely.AspNetCore.Hosting.CoreApp\Homely.AspNetCore.Hosting.CoreApp.csproj -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-build
 
-test: no
+test_script: 
+  - dotnet test -c %CONFIGURATION% --no-build
+
+after_test:
+  - dotnet pack src\Homely.AspNetCore.Hosting.CoreApp\Homely.AspNetCore.Hosting.CoreApp.csproj -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-build
 
 artifacts:
   - path: '**\*.nupkg'

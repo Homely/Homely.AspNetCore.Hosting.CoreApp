@@ -1,3 +1,7 @@
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace Homely.AspNetCore.Hosting.CoreApp
 {
     public class MainOptions
@@ -29,5 +33,17 @@ namespace Homely.AspNetCore.Hosting.CoreApp
         /// </summary>
         /// <remarks>Defaults to <code>ASPNETCORE_ENVIRONMENT</code>.</remarks>
         public string EnvironmentVariableKey { get; set; } = "ASPNETCORE_ENVIRONMENT";
+
+        /// <summary>
+        /// Custom action to configure your own services instead of using the WebHost defaults.<br/>
+        /// An example of this would be for your own Background Tasks which has no Kestrel server, running.
+        /// </summary>
+        public Action<HostBuilderContext, IServiceCollection> CustomConfigureServices { get; set; }
+
+        /// <summary>
+        /// Custom logic to invoke on the Host that was built, but before the host starts.<br/>
+        /// An example of this could be some database migrations.
+        /// </summary>
+        public Action<IHost> CustomPreRunAction { get; set; }
     }
 }

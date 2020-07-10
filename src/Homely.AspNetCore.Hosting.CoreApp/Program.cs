@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
 
 namespace Homely.AspNetCore.Hosting.CoreApp
 {
-    public static class Program
+    public class Program
     {
         private static readonly string Explosion = @"" + Environment.NewLine +
 "" + Environment.NewLine +
@@ -82,19 +83,24 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                     var assemblyDate = string.IsNullOrWhiteSpace(assembly.Location)
                                            ? "-- unknown --"
                                            : File.GetLastWriteTime(assembly.Location).ToString("u");
-                    
+
                     var assemblyInfo = $"Name: {assembly.GetName().Name} | Version: {assembly.GetName().Version} | Date: {assemblyDate}";
 
                     Log.Information(assemblyInfo);
                 }
 
-                await CreateHostBuilder<T>(options.CommandLineArguments).Build()
-                                                                        .RunAsync();
+                var host = CreateHostBuilder<T>(options).Build();
+
+                // Execute any pre-run action.
+                options.CustomPreRunAction?.Invoke(host);
+
+                // Ok, now lets go and start!
+                await host.RunAsync();
             }
             catch (Exception exception)
             {
                 const string errorMessage = "Something seriously unexpected has occurred while preparing the Host. Sadness :~(";
-                
+
                 // We might NOT have created a logger ... because we might be _trying_ to create the logger but
                 // we have some bad setup-configuration-data and boom!!! No logger successfully setup/created.
                 // So, if we do have a logger created, then use it.
@@ -146,16 +152,35 @@ namespace Homely.AspNetCore.Hosting.CoreApp
                 .Build();
         }
 
-        public static IHostBuilder CreateHostBuilder<T>(string[] args) where T : class =>
-            CreateHostBuilder<T>(new MainOptions { CommandLineArguments = args });
+        public static IHostBuilder CreateHostBuilder<T>(MainOptions options) where T : class
+        {
+            var hostBuilder = Host
+                .CreateDefaultBuilder(options.CommandLineArguments)
+                .UseSerilog();
 
-        public static IHostBuilder CreateHostBuilder<T>(MainOptions options) where T : class =>
-            Host.CreateDefaultBuilder(options.CommandLineArguments)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<T>()
-                              .UseConfiguration(GetConfigurationBuilder(options.EnvironmentVariableKey))
-                              .UseSerilog();
-                });
+            if (options.CustomConfigureServices is null)
+            {
+                hostBuilder
+                    .ConfigureWebHostDefaults(webBuilder =>
+                     {
+                         webBuilder
+                            .UseStartup<T>()
+                            .UseConfiguration(GetConfigurationBuilder(options.EnvironmentVariableKey));
+                     });
+            }
+            else
+            {
+                hostBuilder.ConfigureHostConfiguration(builder =>
+                                 {
+                                     var configuration = GetConfigurationBuilder(options.EnvironmentVariableKey);
+                                     builder.AddConfiguration(configuration);
+                                 });
+
+                hostBuilder.ConfigureServices(options.CustomConfigureServices);
+            }
+
+            return hostBuilder;
+        }
+            
     }
 }
